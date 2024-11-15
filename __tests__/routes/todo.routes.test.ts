@@ -1,21 +1,27 @@
+import { MongoDBContainer } from "@testcontainers/mongodb";
 import "jest";
 import mongoose from "mongoose";
 import request from "supertest";
 import app from "../../src/app";
 import { CreateTodo } from "../../src/types/todo";
 
-const MONGODB_URI = "mongodb://localhost:27017/test-todo-test-db";
-
 /* Connecting to the database before each test. */
-beforeEach(async () => {
-  await mongoose.connect(MONGODB_URI).then(() => {
-    console.log("Connected to MongoDB");
-  });
+let mongodbContainer;
+beforeAll(async () => {
+  mongodbContainer = await new MongoDBContainer().start();
+
+  await mongoose
+    .connect(mongodbContainer.getConnectionString(), { directConnection: true })
+    .then(() => {
+      console.log("Connected to MongoDB");
+    });
 });
 
 /* Closing database connection after each test. */
-afterEach(async () => {
+afterAll(async () => {
   await mongoose.connection.close();
+  await mongoose.disconnect();
+  mongodbContainer?.stop();
 });
 
 // beforeAll(async () => {
