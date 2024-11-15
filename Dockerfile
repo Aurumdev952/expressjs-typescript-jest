@@ -24,4 +24,4 @@ WORKDIR /app
 ENV PORT=5000
 EXPOSE 5000
 
-CMD [ "dist/server.js"]
+CMD [ "dist/index.js"]
