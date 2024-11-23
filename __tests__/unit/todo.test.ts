@@ -1,14 +1,13 @@
-jest.mock("../../src/models/todo", () => ({
-  findById: jest.fn(),
-  find: jest.fn(),
-  create: jest.fn(),
-  findByIdAndUpdate: jest.fn(),
-  deleteOne: jest.fn(),
-}));
-
 import createHttpError from "http-errors";
 import todoModel from "../../src/models/todo";
 import * as todoService from "../../src/service/todo.service";
+
+jest.mock("../../src/models/todo");
+
+beforeEach(() => {
+  jest.clearAllMocks();
+});
+
 describe("getTodo", () => {
   it("should return the todo if found", async () => {
     const mockTodo = { _id: "1", title: "Test Todo" };
